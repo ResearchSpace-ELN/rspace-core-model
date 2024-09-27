@@ -44,4 +44,14 @@ public enum NfsFileSystemOption {
 	 */
 	IRODS_PORT,
 
+	/**
+	 * iRODS auth method
+	 */
+	IRODS_AUTH,
+
+	/**
+	 * iRODS CS negotiation policy
+	 */
+	IRODS_CSNEG,
+
 }
