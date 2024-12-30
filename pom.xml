@@ -3,8 +3,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>rspace-core-model</artifactId>
-  <version>2.4.1</version>
+  <artifactId>rspace-core-model-rsdev-441</artifactId>
+  <version>2.6.0</version>
   <parent>
     <artifactId>rspace-parent</artifactId>
     <groupId>com.github.rspace-os</groupId>

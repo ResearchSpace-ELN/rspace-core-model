@@ -9,14 +9,6 @@ import static com.researchspace.model.core.RecordType.TEMPLATE;
 import static com.researchspace.model.record.StructuredDocument.MAX_TAG_LENGTH;
 import static java.lang.String.format;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import com.researchspace.core.util.CollectionFilter;
 import com.researchspace.core.util.MediaUtils;
 import com.researchspace.model.AbstractUserOrGroupImpl;
@@ -27,10 +19,19 @@ import com.researchspace.model.audittrail.AuditTrailData;
 import com.researchspace.model.core.GlobalIdPrefix;
 import com.researchspace.model.core.RecordType;
 import com.researchspace.model.permissions.DefaultPermissionFactory;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.Predicate;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 import lombok.AccessLevel;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -253,6 +254,8 @@ public class Folder extends BaseRecord implements TaggableElnRecord {
 	 */
 	public RecordToFolder addChild(BaseRecord child, ChildAddPolicy policy, User owner, ACLPropagationPolicy aclPolicy)
 			throws IllegalAddChildOperation {
+
+		System.out.println("addChild0: " + Instant.now());
 		// no self edges
 		if (this.equals(child)) {
 			throw new IllegalAddChildOperation("Cannot add this object [" + this + "] as a child of itself.");
@@ -268,7 +271,9 @@ public class Folder extends BaseRecord implements TaggableElnRecord {
 					child.getName(),this.getName() ));
 		}
 
+		System.out.println("addChild1: " + Instant.now());
 		RecordToFolder newedge = doAdd(child, owner);
+		System.out.println("addChild2: " + Instant.now());
 		if (newedge != null) {
 			postProcess(child, owner, newedge, aclPolicy);
 		}
@@ -341,7 +346,9 @@ public class Folder extends BaseRecord implements TaggableElnRecord {
 	}
 
 	public boolean removeChild(BaseRecord child, ACLPropagationPolicy aclPolicy) {
+		System.out.println("removeChild1: " + Instant.now());
 		RecordToFolder toRemove = findRecordInChildRelations(child);
+		System.out.println("removeChild2: " + Instant.now());
 		if (toRemove != null) {
 			boolean removed1 = children.remove(toRemove);
 			boolean removed2 = child.getParents().remove(toRemove);
@@ -351,6 +358,7 @@ public class Folder extends BaseRecord implements TaggableElnRecord {
 				return true;
 			}
 		}
+		System.out.println("removeChild3: " + Instant.now());
 		return false;
 	}
 
@@ -361,17 +369,25 @@ public class Folder extends BaseRecord implements TaggableElnRecord {
 	 * @return
 	 */
 	public boolean removeChild(BaseRecord child) {
+		System.out.println("removeChild0: " + Instant.now());
 		return removeChild(child, ACLPropagationPolicy.DEFAULT_POLICY);
 	}
 
 	RecordToFolder findRecordInChildRelations(BaseRecord child) {
+		System.out.println("findRecordInChildRelations0: " + Instant.now());
+/*
+		children.size();
+		System.out.println("findRecordInChildRelations-afterGetChildren): " + Instant.now());
+*/
+
 		RecordToFolder toRemove = null;
 		for (RecordToFolder reln : children) {
-			if (reln.getRecord().equals(child)) {
+			if (reln.getRecord().getId().equals(child.getId())) {
 				toRemove = reln;
 				break;
 			}
 		}
+		System.out.println("findRecordInChildRelations01: " + Instant.now() + " id: " + toRemove.getId());
 		return toRemove;
 	}
 
