@@ -382,12 +382,13 @@ public class Folder extends BaseRecord implements TaggableElnRecord {
 
 		RecordToFolder toRemove = null;
 		for (RecordToFolder reln : children) {
-			if (reln.getRecord().getId().equals(child.getId())) {
+			if (reln.getRecord().equals(child)) {
 				toRemove = reln;
 				break;
 			}
 		}
-		System.out.println("findRecordInChildRelations01: " + Instant.now() + " id: " + toRemove.getId());
+		System.out.println("findRecordInChildRelations01: " + Instant.now() + " id: "
+				+  (toRemove == null ? null : toRemove.getId()));
 		return toRemove;
 	}
 
