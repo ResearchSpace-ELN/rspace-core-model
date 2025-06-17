@@ -4,7 +4,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>rspace-core-model</artifactId>
-  <version>2.11.1</version>
+  <version>RSDEV-639-external-workflows-model-SNAPSHOT</version>
   <parent>
     <artifactId>rspace-parent</artifactId>
     <groupId>com.github.rspace-os</groupId>
