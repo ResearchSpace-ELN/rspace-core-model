@@ -16,13 +16,13 @@ import lombok.Setter;
 @Getter
 @EqualsAndHashCode(of = { "extId" })
 public class ExternalWorkFlowData implements Serializable {
-  enum ExternalService {
+  public enum ExternalService {
     GALAXY;
   }
-  enum RSPACE_CONTAINER_TYPE {
+  public enum RSPACE_CONTAINER_TYPE {
     DOCUMENT, FIELD;
   }
-  enum RSPACE_DATA_TYPE {
+  public enum RSPACE_DATA_TYPE {
     LOCAL, EXTERNAL;
   }
   @Id
