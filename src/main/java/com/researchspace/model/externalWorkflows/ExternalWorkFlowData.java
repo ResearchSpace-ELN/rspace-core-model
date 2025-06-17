@@ -8,13 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
 @Getter
 @EqualsAndHashCode(of = { "extId" })
 public class ExternalWorkFlowData implements Serializable {
@@ -87,7 +85,22 @@ public class ExternalWorkFlowData implements Serializable {
   @ManyToMany(mappedBy = "externalWorkFlowData")
   @Setter
   private List<ExternalWorkFlowInvocation> externalWorkflowInvocations;
-
+  public ExternalWorkFlowData(
+      ExternalService externalService, long rspacedataid, RSPACE_DATA_TYPE rspaceDataType,
+      long rspacecontainerId, RSPACE_CONTAINER_TYPE rspaceContainerType, String extName,
+      String extId, String extSecondaryId, String extContainerID, String baseUrl
+      ){
+      this.externalService = externalService;
+      this.rspacedataid = rspacedataid;
+      this.rspaceDataType = rspaceDataType;
+      this.rspacecontainerid = rspacecontainerId;
+      this.rspaceContainerType = rspaceContainerType;
+      this.extName = extName;
+      this.extId = extId;
+      this.extSecondaryId = extSecondaryId;
+      this.extContainerID = extContainerID;
+      this.baseUrl = baseUrl;
+  }
   protected ExternalWorkFlowData() {
   }
 }

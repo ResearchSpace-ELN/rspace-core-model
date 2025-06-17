@@ -10,13 +10,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
 @Getter
 @EqualsAndHashCode(of = { "extId"})
 public class ExternalWorkFlowInvocation {
@@ -39,7 +37,13 @@ public class ExternalWorkFlowInvocation {
 
   @ManyToOne
   private ExternalWorkFlow externalWorkFlow;
-
+  public ExternalWorkFlowInvocation(String extId, List<ExternalWorkFlowData> externalWorkFlowData,
+      String status, ExternalWorkFlow externalWorkFlow) {
+    this.extId=extId;
+    this.externalWorkFlowData = externalWorkFlowData;
+    this.status = status;
+    this.externalWorkFlow = externalWorkFlow;
+  }
   protected ExternalWorkFlowInvocation() {
   }
 

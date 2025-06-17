@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.hibernate.annotations.Cache;
@@ -15,7 +14,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @EqualsAndHashCode(of = { "extId" })
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class ExternalWorkFlow {
@@ -34,6 +32,11 @@ public class ExternalWorkFlow {
   @OneToMany(mappedBy = "externalWorkFlow")
   private Set<ExternalWorkFlowInvocation> externalWorkflowInvocations;
 
+  public ExternalWorkFlow(String extId, String name, String description) {
+    this.extId = extId;
+    this.name = name;
+    this.description = description;
+  }
   protected ExternalWorkFlow() {
   }
 }
