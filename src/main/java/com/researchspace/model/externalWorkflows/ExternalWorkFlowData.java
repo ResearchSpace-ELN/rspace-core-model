@@ -54,7 +54,14 @@ public class ExternalWorkFlowData implements Serializable {
   /**
    * the type of RSpace container this data belongs to
    */
+  @NotNull
   private RSPACE_CONTAINER_TYPE rspaceContainerType;
+
+  /**
+   * Filename for this data on the remote service
+   */
+  @NotNull
+  private String extName;
   /**
    * The ID provided by the external service for this data
    */
