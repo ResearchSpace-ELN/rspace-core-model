@@ -86,7 +86,7 @@ public class ExternalWorkFlowData implements Serializable {
 
   @ManyToMany(mappedBy = "externalWorkFlowData")
   @Setter
-  private List<ExternalWorkflowInvocation> externalWorkflowInvocations;
+  private List<ExternalWorkFlowInvocation> externalWorkflowInvocations;
 
   protected ExternalWorkFlowData() {
   }

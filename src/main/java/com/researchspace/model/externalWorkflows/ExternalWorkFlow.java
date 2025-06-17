@@ -1,6 +1,5 @@
 package com.researchspace.model.externalWorkflows;
 
-import com.researchspace.model.externalWorkflows.ExternalWorkFlowData.ExternalService;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +32,7 @@ public class ExternalWorkFlow {
   private String description;
 
   @OneToMany(mappedBy = "externalWorkFlow")
-  private Set<ExternalWorkflowInvocation> externalWorkflowInvocations;
+  private Set<ExternalWorkFlowInvocation> externalWorkflowInvocations;
 
   protected ExternalWorkFlow() {
   }

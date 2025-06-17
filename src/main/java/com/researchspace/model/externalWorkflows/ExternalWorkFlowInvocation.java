@@ -14,14 +14,12 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @AllArgsConstructor
 @Getter
 @EqualsAndHashCode(of = { "extId"})
-public class ExternalWorkflowInvocation {
+public class ExternalWorkFlowInvocation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -42,7 +40,7 @@ public class ExternalWorkflowInvocation {
   @ManyToOne
   private ExternalWorkFlow externalWorkFlow;
 
-  protected ExternalWorkflowInvocation() {
+  protected ExternalWorkFlowInvocation() {
   }
 
 }
