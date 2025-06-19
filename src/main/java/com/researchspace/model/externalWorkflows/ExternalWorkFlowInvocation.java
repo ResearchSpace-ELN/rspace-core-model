@@ -38,7 +38,7 @@ public class ExternalWorkFlowInvocation {
 
   @ManyToOne
   private ExternalWorkFlow externalWorkFlow;
-  @Builder(builderMethodName = "externalWorkFlowInvocationBuilder")
+  @Builder()
   public ExternalWorkFlowInvocation(String extId, List<ExternalWorkFlowData> externalWorkFlowData,
       String status, ExternalWorkFlow externalWorkFlow) {
     this.extId=extId;

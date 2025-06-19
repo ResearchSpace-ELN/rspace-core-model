@@ -32,7 +32,7 @@ public class ExternalWorkFlow {
 
   @OneToMany(mappedBy = "externalWorkFlow")
   private Set<ExternalWorkFlowInvocation> externalWorkflowInvocations;
-  @Builder(builderMethodName = "externalWorkFlowBuilder")
+  @Builder()
   public ExternalWorkFlow(String extId, String name, String description) {
     this.extId = extId;
     this.name = name;
