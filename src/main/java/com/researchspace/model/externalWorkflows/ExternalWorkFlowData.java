@@ -77,6 +77,11 @@ public class ExternalWorkFlowData implements Serializable {
   @NotNull
   private String extContainerID;
   /**
+   * Name for the 'container' storing the data on the external service
+   */
+  @NotNull
+  private String extContainerName;
+  /**
    * Base url to the service this data was uploaded to
    */
   @NotNull
@@ -88,7 +93,7 @@ public class ExternalWorkFlowData implements Serializable {
   public ExternalWorkFlowData(
       ExternalService externalService, long rspacedataid, RSPACE_DATA_TYPE rspaceDataType,
       long rspacecontainerId, RSPACE_CONTAINER_TYPE rspaceContainerType, String extName,
-      String extId, String extSecondaryId, String extContainerID, String baseUrl
+      String extId, String extSecondaryId, String extContainerID, String extContainerName, String baseUrl
       ){
       this.externalService = externalService;
       this.rspacedataid = rspacedataid;
@@ -99,6 +104,7 @@ public class ExternalWorkFlowData implements Serializable {
       this.extId = extId;
       this.extSecondaryId = extSecondaryId;
       this.extContainerID = extContainerID;
+      this.extContainerName = extContainerName;
       this.baseUrl = baseUrl;
   }
   protected ExternalWorkFlowData() {
