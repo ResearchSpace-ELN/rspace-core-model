@@ -49,6 +49,13 @@ public class ExternalWorkFlowData implements Serializable {
    */
   @NotNull
   private long rspacecontainerid;
+
+  /**
+   * the name of the rspace field/document which was used to initiate data transfer for the external workflow.
+   */
+  @NotNull
+  private String rspacecontainerName;
+
   /**
    * the type of RSpace container this data belongs to
    */
@@ -92,13 +99,14 @@ public class ExternalWorkFlowData implements Serializable {
   private List<ExternalWorkFlowInvocation> externalWorkflowInvocations;
   public ExternalWorkFlowData(
       ExternalService externalService, long rspacedataid, RSPACE_DATA_TYPE rspaceDataType,
-      long rspacecontainerId, RSPACE_CONTAINER_TYPE rspaceContainerType, String extName,
+      long rspacecontainerId, String rspaceContainerName,  RSPACE_CONTAINER_TYPE rspaceContainerType, String extName,
       String extId, String extSecondaryId, String extContainerID, String extContainerName, String baseUrl
       ){
       this.externalService = externalService;
       this.rspacedataid = rspacedataid;
       this.rspaceDataType = rspaceDataType;
       this.rspacecontainerid = rspacecontainerId;
+      this.rspacecontainerName = rspaceContainerName;
       this.rspaceContainerType = rspaceContainerType;
       this.extName = extName;
       this.extId = extId;
