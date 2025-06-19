@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -39,8 +40,8 @@ public class ExternalWorkFlowInvocation {
   @ManyToOne
   private ExternalWorkFlow externalWorkFlow;
   @Builder()
-  public ExternalWorkFlowInvocation(String extId, List<ExternalWorkFlowData> externalWorkFlowData,
-      String status, ExternalWorkFlow externalWorkFlow) {
+  public ExternalWorkFlowInvocation(@NonNull String extId, @NonNull List<ExternalWorkFlowData> externalWorkFlowData,
+      @NonNull String status, @NonNull ExternalWorkFlow externalWorkFlow) {
     this.extId=extId;
     this.externalWorkFlowData = externalWorkFlowData;
     this.status = status;

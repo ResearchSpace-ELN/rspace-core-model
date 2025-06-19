@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -33,7 +34,7 @@ public class ExternalWorkFlow {
   @OneToMany(mappedBy = "externalWorkFlow")
   private Set<ExternalWorkFlowInvocation> externalWorkflowInvocations;
   @Builder()
-  public ExternalWorkFlow(String extId, String name, String description) {
+  public ExternalWorkFlow( @NonNull String extId,  @NonNull String name,  @NonNull String description) {
     this.extId = extId;
     this.name = name;
     this.description = description;

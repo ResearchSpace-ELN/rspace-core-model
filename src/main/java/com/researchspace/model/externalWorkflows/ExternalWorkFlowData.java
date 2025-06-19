@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -100,9 +101,9 @@ public class ExternalWorkFlowData implements Serializable {
   private List<ExternalWorkFlowInvocation> externalWorkflowInvocations;
   @Builder()
   public ExternalWorkFlowData(
-      ExternalService externalService, long rspacedataid, RSPACE_DATA_TYPE rspaceDataType,
-      long rspacecontainerId, String rspaceContainerName,  RSPACE_CONTAINER_TYPE rspaceContainerType, String extName,
-      String extId, String extSecondaryId, String extContainerID, String extContainerName, String baseUrl
+      @NonNull ExternalService externalService,  @NonNull long rspacedataid,  @NonNull RSPACE_DATA_TYPE rspaceDataType,
+      @NonNull long rspacecontainerId,  @NonNull String rspaceContainerName,   @NonNull RSPACE_CONTAINER_TYPE rspaceContainerType,  @NonNull String extName,
+      @NonNull String extId,  @NonNull String extSecondaryId,  @NonNull String extContainerID,  @NonNull String extContainerName,  @NonNull String baseUrl
       ){
       this.externalService = externalService;
       this.rspacedataid = rspacedataid;
