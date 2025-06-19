@@ -16,7 +16,6 @@ import lombok.Setter;
 @Entity
 @Getter
 @EqualsAndHashCode(of = { "extId" })
-@Builder(builderMethodName = "externalWorkFlowDataBuilder")
 public class ExternalWorkFlowData implements Serializable {
   public enum ExternalService {
     GALAXY;
@@ -99,6 +98,7 @@ public class ExternalWorkFlowData implements Serializable {
   @ManyToMany(mappedBy = "externalWorkFlowData")
   @Setter
   private List<ExternalWorkFlowInvocation> externalWorkflowInvocations;
+  @Builder(builderMethodName = "externalWorkFlowDataBuilder")
   public ExternalWorkFlowData(
       ExternalService externalService, long rspacedataid, RSPACE_DATA_TYPE rspaceDataType,
       long rspacecontainerId, String rspaceContainerName,  RSPACE_CONTAINER_TYPE rspaceContainerType, String extName,

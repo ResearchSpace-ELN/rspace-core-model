@@ -18,7 +18,6 @@ import lombok.Setter;
 @Entity
 @Getter
 @EqualsAndHashCode(of = { "extId"})
-@Builder(builderMethodName = "externalWorkFlowInvocationBuilder")
 public class ExternalWorkFlowInvocation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +38,7 @@ public class ExternalWorkFlowInvocation {
 
   @ManyToOne
   private ExternalWorkFlow externalWorkFlow;
+  @Builder(builderMethodName = "externalWorkFlowInvocationBuilder")
   public ExternalWorkFlowInvocation(String extId, List<ExternalWorkFlowData> externalWorkFlowData,
       String status, ExternalWorkFlow externalWorkFlow) {
     this.extId=extId;
