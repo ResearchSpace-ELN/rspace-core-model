@@ -10,6 +10,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @EqualsAndHashCode(of = { "extId"})
+@Builder(builderMethodName = "externalWorkFlowInvocationBuilder")
 public class ExternalWorkFlowInvocation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

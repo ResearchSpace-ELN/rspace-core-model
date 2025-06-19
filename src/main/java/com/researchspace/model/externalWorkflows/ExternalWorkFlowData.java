@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @EqualsAndHashCode(of = { "extId" })
+@Builder(builderMethodName = "externalWorkFlowDataBuilder")
 public class ExternalWorkFlowData implements Serializable {
   public enum ExternalService {
     GALAXY;
@@ -117,4 +119,5 @@ public class ExternalWorkFlowData implements Serializable {
   }
   protected ExternalWorkFlowData() {
   }
+
 }

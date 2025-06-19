@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.hibernate.annotations.Cache;
@@ -16,6 +17,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @EqualsAndHashCode(of = { "extId" })
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Builder(builderMethodName = "externalWorkFlowBuilder")
 public class ExternalWorkFlow {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
