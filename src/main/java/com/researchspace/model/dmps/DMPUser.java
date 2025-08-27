@@ -2,16 +2,17 @@ package com.researchspace.model.dmps;
 
 import com.researchspace.model.EcatDocumentFile;
 import com.researchspace.model.User;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.Instant;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Join table for User to DMP, storing date of import.
@@ -36,18 +37,24 @@ public class DMPUser {
     private Instant timestamp;
 
     @ManyToOne
-    private EcatDocumentFile dmpDownloadPdf;
+    private EcatDocumentFile dmpDownloadFile;
 
-    /**
-     * A DMP identifier for an imported DMP, usually a DOI
-     */
+    @Enumerated(EnumType.STRING)
+    private DMPSource source;
+
+    private String doiLink;
+    private String dmpLink;
     private String dmpId;
     private String title;
 
-    public DMPUser(User user, DMP dmp) {
+    public DMPUser(User user, DmpDto dmpDto) {
         this.user = user;
-        this.dmpId = dmp.getDmpId();
-        this.title = dmp.getTitle();
+        this.dmpId = dmpDto.getDmpId();
+        this.title = dmpDto.getTitle();
+        this.source = dmpDto.getSource();
+        this.dmpLink = dmpDto.getDmpLink();
+        this.doiLink = dmpDto.getDoiLink();
         this.timestamp = Instant.now();
     }
+
 }

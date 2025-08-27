@@ -15,8 +15,8 @@ import com.researchspace.model.FileProperty;
 import com.researchspace.model.FileStoreRoot;
 import com.researchspace.model.User;
 import com.researchspace.model.core.GlobalIdPrefix;
-import com.researchspace.model.dmps.DMP;
 import com.researchspace.model.dmps.DMPUser;
+import com.researchspace.model.dmps.DmpDto;
 import com.researchspace.model.elninventory.ListOfMaterials;
 import com.researchspace.model.elninventory.MaterialUsage;
 import com.researchspace.model.field.DateFieldForm;
@@ -816,8 +816,8 @@ class HibernateSandboxTest extends HibernateTest {
 	@Test
 	public void createDMP() throws IOException {
 		User u = createAndSaveAnyUser();
-		DMP dmp = new DMP("https://doi/dmp/12345","A title");
-		DMPUser dmpUser = new DMPUser(u, dmp);
+		DmpDto dmpDto = new DmpDto("https://doi/dmp/12345","A title");
+		DMPUser dmpUser = new DMPUser(u, dmpDto);
 		DMPUser saved = dao.save(dmpUser, DMPUser.class);
 		assertNotNull(saved.getId());
 	}
