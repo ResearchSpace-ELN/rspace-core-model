@@ -1,26 +1,22 @@
 package com.researchspace.model.record;
 
-import java.util.Date;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.researchspace.model.IFieldLinkableElement;
 import com.researchspace.model.core.GlobalIdentifier;
+import com.researchspace.model.dmps.DMPSource;
 import com.researchspace.session.SessionTimeZoneUtils;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
+import lombok.Data;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Class with the most relevant information of a record. It's used for some ajax
  * responses where it doesn't need the whole information of a record. It's also
  * used by FieldContents (from rspace-web) as a reference to linked document.
  */
-@Getter
-@Setter
+@Data
 public class RecordInformation implements IFieldLinkableElement {
 
 	/* base record fields */
@@ -55,7 +51,13 @@ public class RecordInformation implements IFieldLinkableElement {
 	private long size;
 	private String chemString;
 	private Long chemElementId;
-	
+
+	/* dmp file fields */
+	private String dmpLink;
+	private String doiLink;
+	private DMPSource dmpSource;
+
+
 	// only relevant/true/non-null if this document was imported from an XML archive
 	private boolean fromImport;
 	private String originalOwnerUsernamePreImport;
@@ -79,7 +81,6 @@ public class RecordInformation implements IFieldLinkableElement {
 		setOid(baseRecord.getOid());
 		setFromImport(baseRecord.isFromImport());
 		setOriginalOwnerUsernamePreImport(baseRecord.getOriginalCreatorUsername());
-		setShared(baseRecord.isShared());
 	}
 
 	public RecordInformation(RSForm form) {
