@@ -2,6 +2,16 @@ package com.researchspace.model;
 
 import static org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 
+import com.researchspace.model.audittrail.AuditDomain;
+import com.researchspace.model.audittrail.AuditTrailData;
+import com.researchspace.model.audittrail.AuditTrailProperty;
+import com.researchspace.model.core.GlobalIdPrefix;
+import com.researchspace.model.dto.GroupPublicInfo;
+import com.researchspace.model.permissions.AbstractEntityPermissionAdapter;
+import com.researchspace.model.permissions.ConstraintBasedPermission;
+import com.researchspace.model.permissions.GroupPermissionsAdapter;
+import com.researchspace.model.raid.UserRaid;
+import com.researchspace.model.record.PermissionsAdaptable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,34 +25,24 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.shiro.authz.Permission;
 import org.hibernate.annotations.Formula;
-
-import com.researchspace.model.audittrail.AuditDomain;
-import com.researchspace.model.audittrail.AuditTrailData;
-import com.researchspace.model.audittrail.AuditTrailProperty;
-import com.researchspace.model.core.GlobalIdPrefix;
-import com.researchspace.model.dto.GroupPublicInfo;
-import com.researchspace.model.permissions.AbstractEntityPermissionAdapter;
-import com.researchspace.model.permissions.ConstraintBasedPermission;
-import com.researchspace.model.permissions.GroupPermissionsAdapter;
-import com.researchspace.model.record.PermissionsAdaptable;
 
 /**
  * A Group of users.
@@ -80,6 +80,7 @@ public class Group extends AbstractUserOrGroupImpl implements Comparable<Group>,
 	private Set<Community> communities = new HashSet<>();
 	private boolean selfService = false;
 	private int memberCount = 0;
+  private UserRaid raid;
 
 	@Formula("(select count(*) from UserGroup ug where ug.group_id = id)")
 	public int getMemberCount() {
@@ -601,7 +602,7 @@ public class Group extends AbstractUserOrGroupImpl implements Comparable<Group>,
 	@Override
 	public String toString() {
 		return "Group [uniqueName=" + uniqueName + ", displayName=" + displayName + ", groupType=" + groupType
-				+ ", memberCount=" + memberCount + "]";
+				+ ", memberCount=" + memberCount +", raid=" + raid + "]";
 	}
 
 	/*
@@ -944,4 +945,15 @@ public class Group extends AbstractUserOrGroupImpl implements Comparable<Group>,
 	public void setAllowBioOntologies(boolean allowBioOntologies) {
 		this.allowBioOntologies = allowBioOntologies;
 	}
+
+	public void setRaid(UserRaid raid) {
+		this.raid = raid;
+	}
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "raid_id", referencedColumnName = "id")
+	public UserRaid getRaid() {
+		return this.raid;
+	}
+
 }
