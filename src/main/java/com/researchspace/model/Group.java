@@ -10,8 +10,8 @@ import com.researchspace.model.dto.GroupPublicInfo;
 import com.researchspace.model.permissions.AbstractEntityPermissionAdapter;
 import com.researchspace.model.permissions.ConstraintBasedPermission;
 import com.researchspace.model.permissions.GroupPermissionsAdapter;
+import com.researchspace.model.raid.UserRaid;
 import com.researchspace.model.record.PermissionsAdaptable;
-import com.researchspace.raid.UserRaid;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +29,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -79,7 +80,7 @@ public class Group extends AbstractUserOrGroupImpl implements Comparable<Group>,
 	private Set<Community> communities = new HashSet<>();
 	private boolean selfService = false;
 	private int memberCount = 0;
-	private UserRaid raidAssociated;
+  private UserRaid raid;
 
 	@Formula("(select count(*) from UserGroup ug where ug.group_id = id)")
 	public int getMemberCount() {
@@ -945,15 +946,14 @@ public class Group extends AbstractUserOrGroupImpl implements Comparable<Group>,
 		this.allowBioOntologies = allowBioOntologies;
 	}
 
-	public void setRaidAssociated(UserRaid userRaid) {
-		this.raidAssociated = userRaid;
+	public void setRaid(UserRaid raid) {
+		this.raid = raid;
 	}
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	public UserRaid getRaidAssociated() {
-		return this.raidAssociated;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "raid_id", referencedColumnName = "id")
+	public UserRaid getRaid() {
+		return this.raid;
 	}
-
-
 
 }

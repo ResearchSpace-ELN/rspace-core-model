@@ -64,6 +64,7 @@ import com.researchspace.model.inventory.field.SampleField;
 import com.researchspace.model.netfiles.ExternalStorageLocation;
 import com.researchspace.model.netfiles.NfsFileStore;
 import com.researchspace.model.netfiles.NfsFileSystem;
+import com.researchspace.model.raid.UserRaid;
 import com.researchspace.model.record.AbstractForm;
 import com.researchspace.model.record.BaseRecord;
 import com.researchspace.model.record.Folder;
@@ -80,125 +81,126 @@ import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Common class for hibernate-based tests.
- * 
- * To run these tests add this line (the tests use same DB credentials as for RSpace)
- * mysql > grant all on hibtest.* to 'rspacedbuser'@'localhost';
- *
+ * <p>
+ * To run these tests add this line (the tests use same DB credentials as for RSpace) mysql > grant
+ * all on hibtest.* to 'rspacedbuser'@'localhost';
  */
 public abstract class HibernateTest {
 
-	static SessionFactory sf;
-	static String testDbName = "hibtest";
+  static SessionFactory sf;
+  static String testDbName = "hibtest";
 
-	// this will be used for all test-cases
-	@BeforeAll
-	static void beforeAll() {
-		sf = HibernateUtils.getSessionFactory(testDbName, recordClasses());
-	}
-	// enable other tests to use a differently configured session factory
-	@AfterAll
-	static void afterAll () {
-		sf.close();
-	}
+  // this will be used for all test-cases
+  @BeforeAll
+  static void beforeAll() {
+    sf = HibernateUtils.getSessionFactory(testDbName, recordClasses());
+  }
 
-	@BeforeEach
-	void before() {
-		dao = new TestDao(sf);
-		testUser = createAndSaveAnyUser();
-	}
-	
-	protected User createAndSaveAnyUser() {
-		User u = TestFactory.createAnyUser(CoreTestUtils.getRandomName(10));
-		u.setId(2L);
-		return dao.save(u, User.class);
-	}
+  // enable other tests to use a differently configured session factory
+  @AfterAll
+  static void afterAll() {
+    sf.close();
+  }
 
-	TestDao dao;
-	User testUser;
-	RecordFactory rf = new RecordFactory();
+  @BeforeEach
+  void before() {
+    dao = new TestDao(sf);
+    testUser = createAndSaveAnyUser();
+  }
 
-	protected void saveAssociatedEntities(Sample sample) {
-		saveImageFileProperties(sample);
-		saveSampleAttachedFiles(sample);
-		saveSampleFieldAttachments(sample);
+  protected User createAndSaveAnyUser() {
+    User u = TestFactory.createAnyUser(CoreTestUtils.getRandomName(10));
+    u.setId(2L);
+    return dao.save(u, User.class);
+  }
 
-		SubSample originalSS = sample.getActiveSubSamples().get(0);
-		saveImageFileProperties(originalSS);
-	}
+  TestDao dao;
+  User testUser;
+  RecordFactory rf = new RecordFactory();
 
-	protected void saveImageFileProperties(InventoryRecord invRec) {
-		if (invRec.getImageFileProperty() == null) {
-			return; // record to save prob has no images 
-		}
-		dao.save(invRec.getImageFileProperty().getRoot(), FileStoreRoot.class);
-		dao.save(invRec.getThumbnailFileProperty().getRoot(), FileStoreRoot.class);
-		dao.save(invRec.getImageFileProperty(), FileProperty.class);
-		dao.save(invRec.getThumbnailFileProperty(), FileProperty.class);
-		if(invRec.isContainer()) {
-			Container c = (Container)invRec;
-			if(c.getLocationsImageFileProperty() != null) {
-				dao.save(c.getLocationsImageFileProperty().getRoot(), FileProperty.class);
-				dao.save(c.getLocationsImageFileProperty(), FileProperty.class);
-			}
-		}
-	}
-	
-	protected void saveSampleAttachedFiles(Sample sample) {
-		for (InventoryFile invFile : sample.getAttachedFiles()) {
-			dao.save(invFile.getFileProperty().getRoot(), FileStoreRoot.class);
-			dao.save(invFile.getFileProperty(), FileProperty.class);
-		}
-	}
+  protected void saveAssociatedEntities(Sample sample) {
+    saveImageFileProperties(sample);
+    saveSampleAttachedFiles(sample);
+    saveSampleFieldAttachments(sample);
 
-	protected void saveSampleFieldAttachments(Sample sample) {
-		for (SampleField sf : sample.getActiveFields()) {
-			if (FieldType.ATTACHMENT.equals(sf.getType())) {
-				InventoryFile attachedFile = sf.getAttachedFile();
-				if (attachedFile != null) {
-					dao.save(attachedFile.getFileProperty().getRoot(), FileStoreRoot.class);
-					dao.save(attachedFile.getFileProperty(), FileProperty.class);
-				}
-			}
-		}
-	}
-	
-	protected void saveParentTemplateForSample(Sample sample) {
-		saveRadioAndChoiceDefinitions(dao, sample.getSTemplate());
-		dao.save(sample.getSTemplate(), Sample.class);
-	}
+    SubSample originalSS = sample.getActiveSubSamples().get(0);
+    saveImageFileProperties(originalSS);
+  }
 
-	//util method to save radio/choice definitions
-	protected void saveRadioAndChoiceDefinitions(TestDao dao2, Sample complexSample) {
-		complexSample.getActiveFields().stream().filter(f->FieldType.CHOICE.equals(f.getType()))
-			 .map(field->(InventoryChoiceField)field)
-			 .forEach(cf->dao2.save(cf.getChoiceDef(), InventoryChoiceFieldDef.class));
-		complexSample.getActiveFields().stream().filter(f->FieldType.RADIO.equals(f.getType()))
-			 .map(field->(InventoryRadioField)field)
-			 .forEach(cf->dao2.save(cf.getRadioDef(), InventoryRadioFieldDef.class));
-	}
-	
-	
-	
-	// these classes must all be mapped for hibernate to work with any of them
-	// but it's quicker to run than searching packages for entities.
-	// add new classes as needed.
-	static Class<?>[] recordClasses() {
-		return new Class[] { DateFieldForm.class, NumberFieldForm.class, TextFieldForm.class, StringFieldForm.class,
-				TimeFieldForm.class, RadioFieldForm.class, ChoiceFieldForm.class, ReferenceFieldForm.class,
-				DateField.class, TextField.class, Field.class, UserPreference.class, Community.class, UserGroup.class, Group.class,
-				RecordAttachment.class, RecordToFolder.class, FileProperty.class, FileStoreRoot.class,
-				EcatMediaFile.class, EcatImage.class, EcatDocumentFile.class, ImageBlob.class, Record.class, FieldAttachment.class,
-				ExternalStorageLocation.class, NfsFileSystem.class, NfsFileStore.class, Folder.class, Role.class, BaseRecord.class,
-				RSForm.class, FieldForm.class, StructuredDocument.class, AbstractUserOrGroupImpl.class, User.class,
-				SampleField.class, InventoryNumberField.class, InventoryStringField.class, InventoryDateField.class,
-				InventoryTimeField.class, InventoryReferenceField.class, InventoryTextField.class,
-				InventoryChoiceField.class, InventoryRadioField.class, InventoryAttachmentField.class,
-				AttachmentFieldForm.class, URIFieldForm.class, UriField.class, InventoryUriField.class,
-				Sample.class, SubSample.class, AbstractForm.class, Barcode.class, DigitalObjectIdentifier.class,
-				ExtraNumberField.class, ExtraTextField.class, SubSampleNote.class, 
-				Container.class, ContainerLocation.class, InventoryFile.class, 
-				InventoryRadioFieldDef.class, InventoryChoiceFieldDef.class, 
-				ListOfMaterials.class, MaterialUsage.class, DMPUser.class, Basket.class, BasketItem.class };
-	}
+  protected void saveImageFileProperties(InventoryRecord invRec) {
+    if (invRec.getImageFileProperty() == null) {
+      return; // record to save prob has no images
+    }
+    dao.save(invRec.getImageFileProperty().getRoot(), FileStoreRoot.class);
+    dao.save(invRec.getThumbnailFileProperty().getRoot(), FileStoreRoot.class);
+    dao.save(invRec.getImageFileProperty(), FileProperty.class);
+    dao.save(invRec.getThumbnailFileProperty(), FileProperty.class);
+    if (invRec.isContainer()) {
+      Container c = (Container) invRec;
+      if (c.getLocationsImageFileProperty() != null) {
+        dao.save(c.getLocationsImageFileProperty().getRoot(), FileProperty.class);
+        dao.save(c.getLocationsImageFileProperty(), FileProperty.class);
+      }
+    }
+  }
+
+  protected void saveSampleAttachedFiles(Sample sample) {
+    for (InventoryFile invFile : sample.getAttachedFiles()) {
+      dao.save(invFile.getFileProperty().getRoot(), FileStoreRoot.class);
+      dao.save(invFile.getFileProperty(), FileProperty.class);
+    }
+  }
+
+  protected void saveSampleFieldAttachments(Sample sample) {
+    for (SampleField sf : sample.getActiveFields()) {
+      if (FieldType.ATTACHMENT.equals(sf.getType())) {
+        InventoryFile attachedFile = sf.getAttachedFile();
+        if (attachedFile != null) {
+          dao.save(attachedFile.getFileProperty().getRoot(), FileStoreRoot.class);
+          dao.save(attachedFile.getFileProperty(), FileProperty.class);
+        }
+      }
+    }
+  }
+
+  protected void saveParentTemplateForSample(Sample sample) {
+    saveRadioAndChoiceDefinitions(dao, sample.getSTemplate());
+    dao.save(sample.getSTemplate(), Sample.class);
+  }
+
+  //util method to save radio/choice definitions
+  protected void saveRadioAndChoiceDefinitions(TestDao dao2, Sample complexSample) {
+    complexSample.getActiveFields().stream().filter(f -> FieldType.CHOICE.equals(f.getType()))
+        .map(field -> (InventoryChoiceField) field)
+        .forEach(cf -> dao2.save(cf.getChoiceDef(), InventoryChoiceFieldDef.class));
+    complexSample.getActiveFields().stream().filter(f -> FieldType.RADIO.equals(f.getType()))
+        .map(field -> (InventoryRadioField) field)
+        .forEach(cf -> dao2.save(cf.getRadioDef(), InventoryRadioFieldDef.class));
+  }
+
+
+  // these classes must all be mapped for hibernate to work with any of them
+  // but it's quicker to run than searching packages for entities.
+  // add new classes as needed.
+  static Class<?>[] recordClasses() {
+    return new Class[]{DateFieldForm.class, NumberFieldForm.class, TextFieldForm.class,
+        StringFieldForm.class, TimeFieldForm.class, RadioFieldForm.class, ChoiceFieldForm.class,
+        ReferenceFieldForm.class, DateField.class, TextField.class, Field.class,
+        UserPreference.class, Community.class, UserGroup.class, Group.class, RecordAttachment.class,
+        RecordToFolder.class, FileProperty.class, FileStoreRoot.class, EcatMediaFile.class,
+        EcatImage.class, EcatDocumentFile.class, ImageBlob.class, Record.class,
+        FieldAttachment.class, ExternalStorageLocation.class, NfsFileSystem.class,
+        NfsFileStore.class, Folder.class, Role.class, BaseRecord.class, RSForm.class,
+        FieldForm.class, StructuredDocument.class, AbstractUserOrGroupImpl.class, User.class,
+        SampleField.class, InventoryNumberField.class, InventoryStringField.class,
+        InventoryDateField.class, InventoryTimeField.class, InventoryReferenceField.class,
+        InventoryTextField.class, InventoryChoiceField.class, InventoryRadioField.class,
+        InventoryAttachmentField.class, AttachmentFieldForm.class, URIFieldForm.class,
+        UriField.class, InventoryUriField.class, Sample.class, SubSample.class, AbstractForm.class,
+        Barcode.class, DigitalObjectIdentifier.class, ExtraNumberField.class, ExtraTextField.class,
+        SubSampleNote.class, Container.class, ContainerLocation.class, InventoryFile.class,
+        InventoryRadioFieldDef.class, InventoryChoiceFieldDef.class, ListOfMaterials.class,
+        MaterialUsage.class, DMPUser.class, Basket.class, BasketItem.class, UserRaid.class};
+  }
 
 }
