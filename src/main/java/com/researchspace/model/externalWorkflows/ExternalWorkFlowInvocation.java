@@ -20,7 +20,7 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@EqualsAndHashCode(of = { "extId"})
+@EqualsAndHashCode(of = { "extId","externalWorkFlow"})
 public class ExternalWorkFlowInvocation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

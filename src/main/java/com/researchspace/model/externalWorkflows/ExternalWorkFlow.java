@@ -18,7 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Getter
-@EqualsAndHashCode(of = { "extId" })
+@EqualsAndHashCode(of = { "extId","name" })
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class ExternalWorkFlow {
   @Id

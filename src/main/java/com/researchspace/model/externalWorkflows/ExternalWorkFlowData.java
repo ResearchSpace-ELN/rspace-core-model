@@ -17,7 +17,7 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@EqualsAndHashCode(of = { "extId","rspacedataid" })
+@EqualsAndHashCode(of = { "extId","rspacedataid","externalService" })
 public class ExternalWorkFlowData implements Serializable {
   public enum ExternalService {
     GALAXY;
